@@ -1,0 +1,82 @@
+
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TADC Mini Game</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: black; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let player = {
+  x: 100,
+  y: 100,
+  size: 40,
+  color: "red",
+  speed: 5,
+  name: "Pomni"
+};
+
+let keys = {};
+
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => keys[e.key] = false);
+
+// zmiana postaci
+function setCharacter(name, color) {
+  player.name = name;
+  player.color = color;
+}
+
+document.addEventListener("keypress", e => {
+  if (e.key === "1") setCharacter("Pomni", "red");
+  if (e.key === "2") setCharacter("Jax", "purple");
+  if (e.key === "3") setCharacter("Gangle", "white");
+  if (e.key === "4") setCharacter("Zooble", "green");
+  if (e.key === "5") setCharacter("Kinger", "yellow");
+});
+
+function update() {
+  if (keys["w"]) player.y -= player.speed;
+  if (keys["s"]) player.y += player.speed;
+  if (keys["a"]) player.x -= player.speed;
+  if (keys["d"]) player.x += player.speed;
+}
+
+function draw() {
+  ctx.fillStyle = "#111";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // mapa (prosta)
+  ctx.fillStyle = "#333";
+  ctx.fillRect(200, 200, 200, 200);
+
+  // gracz
+  ctx.fillStyle = player.color;
+  ctx.fillRect(player.x, player.y, player.size, player.size);
+
+  ctx.fillStyle = "white";
+  ctx.fillText(player.name, player.x, player.y - 10);
+}
+
+function gameLoop() {
+  update();
+  draw();
+  requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+</script>
+</body>
+</html>
